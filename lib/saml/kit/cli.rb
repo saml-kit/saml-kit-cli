@@ -34,7 +34,7 @@ module Saml
             [document.id, document.issuer, document.version, document.issue_instant.iso8601 ]
           ]
           say ""
-          say document.to_xml(pretty: true)
+          say document.to_xml(pretty: true), :green
         end
       end
 
