@@ -24,9 +24,34 @@ module Saml
         end
       end
 
+      class Generate < Thor
+        desc "keypair passphrase", "Create a key pair using a self signed certificate."
+        def keypair(passphrase = nil)
+          generator = ::Xml::Kit::SelfSignedCertificate.new
+          certificate, private_key = generator.create(passphrase: passphrase)
+
+          say "** BEGIN File Format **", :green
+          print certificate
+          say private_key
+          say "***********************", :green
+          say
+
+          say "X509_CERTIFICATE=" + certificate.inspect
+          say
+          say "PRIVATE_KEY=" + private_key.inspect
+
+          say
+          say "Private Key Passphrase:", :green
+          say passphrase.inspect
+        end
+      end
+
       class Application < Thor
-        desc "decode SUBCOMMAND ...ARGS", "decode a SAMLRequest/SAMLResponse"
+        desc "decode SUBCOMMAND ...ARGS", "decode SAMLRequest/SAMLResponse."
         subcommand "decode", Decode
+
+        desc "generate SUBCOMMAND ...ARGS", "generate SAML artifacts."
+        subcommand "generate", Generate
       end
     end
   end
