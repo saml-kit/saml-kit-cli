@@ -2,4 +2,4 @@
 
 require "saml/kit/cli"
 
-Saml::Kit::Cli::Application.start
+Saml::Kit::Cli::Application.start(ARGV)
