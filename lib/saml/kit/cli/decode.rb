@@ -29,9 +29,8 @@ module Saml
             ["ID", "Issuer", "Version", "Issue instant", "Type", "Valid", "Signed", "Trusted"],
             [document.id, document.issuer, document.version, document.issue_instant.iso8601, document.class, document.valid?, document.signed?, document.trusted? ]
           ]
-          say("ERRORS", :red) if document.invalid?
           document.errors.full_messages.each do |error|
-            say error, :red
+            say_status :error, error, :red
           end
           say ""
           say document.to_xml(pretty: true), :green
