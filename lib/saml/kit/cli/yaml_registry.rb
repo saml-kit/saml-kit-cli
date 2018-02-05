@@ -7,20 +7,37 @@ module Saml
         end
 
         def register(metadata)
-          @items.transaction do
-            @items[metadata.entity_id] = metadata.to_xml
+          with_transaction do |db|
+            db[metadata.entity_id] = metadata.to_xml
           end
           metadata
         end
 
         def metadata_for(entity_id)
-          Saml::Kit::Metadata.from(@items[entity_id])
+          with_transaction do |db|
+            Saml::Kit::Metadata.from(db[entity_id])
+          end
         end
 
         def each
-          @items.transaction do
-            @items.roots.each do |key|
+          with_transaction do |db|
+            db.roots.each do |key|
               yield metadata_for(key)
+            end
+          end
+        end
+
+        private
+
+        def with_transaction
+          if @in_transaction
+            yield @items
+          else
+            @items.transaction do
+              @in_transaction = true
+              yield @items
+            ensure
+              @in_transaction = false
             end
           end
         end

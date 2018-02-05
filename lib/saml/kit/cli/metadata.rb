@@ -14,6 +14,11 @@ module Saml
           end
         end
 
+        desc "show entity_id", "show the metadata associated with an entityId"
+        def show(entity_id)
+          say registry.metadata_for(entity_id).to_xml(pretty: true), :green
+        end
+
         private
 
         def registry
