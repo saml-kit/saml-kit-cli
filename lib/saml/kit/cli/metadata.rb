@@ -7,6 +7,13 @@ module Saml
           say registry.register_url(url).to_xml(pretty: true), :green
         end
 
+        desc "list", "List each of the registered entityId's"
+        def list
+          registry.each do |x|
+            say x.entity_id, :green
+          end
+        end
+
         private
 
         def registry

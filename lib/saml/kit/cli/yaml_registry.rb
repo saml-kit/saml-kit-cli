@@ -16,6 +16,14 @@ module Saml
         def metadata_for(entity_id)
           Saml::Kit::Metadata.from(@items[entity_id])
         end
+
+        def each
+          @items.transaction do
+            @items.roots.each do |key|
+              yield metadata_for(key)
+            end
+          end
+        end
       end
     end
   end
