@@ -15,7 +15,9 @@ module Saml
 
         def metadata_for(entity_id)
           with_transaction do |db|
-            Saml::Kit::Metadata.from(db[entity_id])
+            xml = db[entity_id]
+            return nil if xml.nil?
+            Saml::Kit::Metadata.from(xml)
           end
         end
 
