@@ -1,7 +1,7 @@
 module Saml
   module Kit
     module Cli
-      class Generate < Thor
+      class Certificate < Thor
         desc "keypair", "Create a key pair using a self signed certificate."
         method_option :format, default: "pem", required: false, enum: ["pem", "env"]
         method_option :passphrase, default: nil, required: false
