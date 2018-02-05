@@ -2,8 +2,9 @@
 
 require "saml/kit/cli"
 
+samlkitrc = ENV.fetch("SAMLKITRC", File.join(Dir.home, ".samlkitrc"))
 Saml::Kit.configure do |configuration|
-  configuration.registry = Saml::Kit::Cli::YamlRegistry.new(File.join(Dir.home, ".samlkitrc"))
+  configuration.registry = Saml::Kit::Cli::YamlRegistry.new(samlkitrc)
   configuration.logger.level = Logger::FATAL
 end
 
