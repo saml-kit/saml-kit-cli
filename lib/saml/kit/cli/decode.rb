@@ -26,8 +26,8 @@ module Saml
           2.times { say "" }
           say_status :success, "Decoded #{document.class}"
           print_table [
-            ["ID", "Issuer", "Version", "Issue instant", "Type", "Valid"],
-            [document.id, document.issuer, document.version, document.issue_instant.iso8601, document.class, document.valid? ]
+            ["ID", "Issuer", "Version", "Issue instant", "Type", "Valid", "Signed", "Trusted"],
+            [document.id, document.issuer, document.version, document.issue_instant.iso8601, document.class, document.valid?, document.signed?, document.trusted? ]
           ]
           say("ERRORS", :red) if document.invalid?
           document.errors.full_messages.each do |error|
