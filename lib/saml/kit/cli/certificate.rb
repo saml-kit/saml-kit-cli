@@ -37,6 +37,7 @@ module Saml
             ["Subject", "Issuer", "Serial", "Not Before", "Not After", "Fingerprint"],
             [x509.subject, x509.issuer, x509.serial, x509.not_before, x509.not_after, certificate.fingerprint]
           ]
+          say x509.to_text, :green
         end
       end
     end
