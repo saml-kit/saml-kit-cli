@@ -28,6 +28,16 @@ module Saml
           say "Private Key Passphrase:", :green
           say passphrase.inspect
         end
+
+        desc "dump", "Dump the details of a X509 Certificate."
+        def dump(raw)
+          certificate = ::Xml::Kit::Certificate.new(raw, use: :unknown)
+          x509 = certificate.x509
+          print_table [
+            ["Subject", "Issuer", "Serial", "Not Before", "Not After", "Fingerprint"],
+            [x509.subject, x509.issuer, x509.serial, x509.not_before, x509.not_after, certificate.fingerprint]
+          ]
+        end
       end
     end
   end
