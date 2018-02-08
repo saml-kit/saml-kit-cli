@@ -1,3 +1,5 @@
+require 'uri'
+
 module Saml
   module Kit
     module Cli
@@ -6,11 +8,18 @@ module Saml
         method_option :format, default: "short", required: false, enum: ["short", "full"]
         def verify(file)
           format = options[:format]
-          path = File.expand_path(file)
-          say_status :status, "Attempting to read #{path}...", :yellow
-          content = IO.read(path)
-          document = ::Xml::Kit::Document.new(content)
+          uri = URI.parse(file) rescue nil
 
+          if uri.nil?
+            path = File.expand_path(file)
+            say_status :status, "Attempting to read #{path}...", :yellow
+            content = IO.read(path)
+          else
+            say_status :status, "Downloading from #{uri}...", :yellow
+            content = Net::HTTP.get_response(uri).body.chomp
+          end
+          document = ::Xml::Kit::Document.new(content)
+          say document.to_xml(pretty: true)
           if document.valid?
             say_status :success, "#{file} is valid", :green
           else
