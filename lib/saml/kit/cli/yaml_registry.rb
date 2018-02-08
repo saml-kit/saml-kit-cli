@@ -35,11 +35,13 @@ module Saml
           if @in_transaction
             yield @items
           else
-            @items.transaction do
-              @in_transaction = true
-              yield @items
-            ensure
-              @in_transaction = false
+            begin
+              @items.transaction do
+                @in_transaction = true
+                yield @items
+              ensure
+                @in_transaction = false
+              end
             end
           end
         end
