@@ -17,6 +17,8 @@ module Saml
           ]
           say ""
           say document.to_xml(pretty: true), :green
+        rescue StandardError => error
+          say error.message, :red
         end
 
         desc "post saml", "Decodes the SAMLRequest/SAMLResponse using the HTTP Post binding"
@@ -34,6 +36,8 @@ module Saml
           end
           say ""
           say document.to_xml(pretty: true), :green
+        rescue StandardError => error
+          say error.message, :red
         end
       end
     end
