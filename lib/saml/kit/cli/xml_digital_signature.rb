@@ -8,13 +8,14 @@ module Saml
         method_option :format, default: "short", required: false, enum: ["short", "full"]
         def verify(file)
           format = options[:format]
-          uri = URI.parse(file) rescue nil
+          path = File.expand_path(file)
 
-          if uri.nil?
+          if File.exist?(path)
             path = File.expand_path(file)
             say_status :status, "Attempting to read #{path}...", :yellow
             content = IO.read(path)
           else
+            uri = URI.parse(file) rescue nil
             say_status :status, "Downloading from #{uri}...", :yellow
             content = Net::HTTP.get_response(uri).body.chomp
           end
