@@ -16,7 +16,7 @@ module Saml
             shell.say(document.signature.certificate.x509.to_text)
           end
           shell.say ""
-          #shell.say document.to_xml(pretty: true), :green
+          shell.say document.to_xml(pretty: true), :green
           shell.say ""
           document.errors.full_messages.each do |error|
             shell.say_status :error, error, :red
