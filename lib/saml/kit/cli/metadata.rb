@@ -16,7 +16,12 @@ module Saml
 
         desc "show entity_id", "show the metadata associated with an entityId"
         def show(entity_id)
-          say registry.metadata_for(entity_id).to_xml(pretty: true), :green
+          metadata = registry.metadata_for(entity_id)
+          if metadata
+            say metadata.to_xml(pretty: true), :green
+          else
+            say "`#{entity_id}` is not registered", :red
+          end
         end
 
         private
