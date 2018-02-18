@@ -47,7 +47,20 @@ module Saml
           case document
           when Saml::Kit::AuthenticationRequest
             table.push(['ACS', document.assertion_consumer_service_url])
-            table.push(['NameId Format', document.name_id_format])
+            table.push(['Name Id Format', document.name_id_format])
+          when Saml::Kit::LogoutRequest
+            table.push(['Name Id', document.name_id])
+          when Saml::Kit::Response
+            table.push(['Assertion Present?', document.assertion.present?])
+            table.push(['Issuer', document.assertion.issuer])
+            table.push(['Name Id', document.assertion.name_id])
+            table.push(['Signed?', document.assertion.signed?])
+            table.push(['Attributes', document.assertion.attributes.inspect])
+            table.push(['Not Before', document.assertion.started_at])
+            table.push(['Not After', document.assertion.expired_at])
+            table.push(['Audiences', document.assertion.audiences.inspect])
+            table.push(['Encrypted?', document.assertion.encrypted?])
+            table.push(['Decryptable', document.assertion.decryptable?])
           end
           if document.signature.present?
             table.push(['Digest Value', document.signature.digest_value])
