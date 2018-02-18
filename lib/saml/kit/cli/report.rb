@@ -44,6 +44,16 @@ module Saml
             ['Signed?', !!document.signed?],
             ['Trusted?', !!document.trusted?],
           ]
+          if document.signature.present?
+            signature = document.signature
+            table.push(['Digest Value', signature.digest_value])
+            table.push(['Expected Digest Value', signature.expected_digest_value])
+            table.push(['Digest Method', signature.digest_method])
+            table.push(['Signature Value', truncate(signature.signature_value)])
+            table.push(['Signature Method', signature.signature_method])
+            table.push(['Canonicalization Method', signature.canonicalization_method])
+            table.push(['', signature.certificate.x509.to_text])
+          end
           case document
           when Saml::Kit::AuthenticationRequest
             table.push(['ACS', document.assertion_consumer_service_url])
@@ -61,14 +71,16 @@ module Saml
             table.push(['Audiences', document.assertion.audiences.inspect])
             table.push(['Encrypted?', document.assertion.encrypted?])
             table.push(['Decryptable', document.assertion.decryptable?])
-          end
-          if document.signature.present?
-            table.push(['Digest Value', document.signature.digest_value])
-            table.push(['Digest Method', document.signature.digest_method])
-            table.push(['Signature Value', truncate(document.signature.signature_value)])
-            table.push(['Signature Method', document.signature.signature_method])
-            table.push(['Canonicalization Method', document.signature.canonicalization_method])
-            table.push(['Certificate', document.signature.certificate.x509.to_text])
+            if document.assertion.present?
+              signature = document.assertion.signature
+              table.push(['Digest Value', signature.digest_value])
+              table.push(['Expected Digest Value', signature.expected_digest_value])
+              table.push(['Digest Method', signature.digest_method])
+              table.push(['Signature Value', truncate(signature.signature_value)])
+              table.push(['Signature Method', signature.signature_method])
+              table.push(['Canonicalization Method', signature.canonicalization_method])
+              table.push(['', signature.certificate.x509.to_text])
+            end
           end
           table
         end
