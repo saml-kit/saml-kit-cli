@@ -16,7 +16,7 @@ module Saml
             shell.say(document.signature.certificate.x509.to_text)
           end
           shell.say ""
-          shell.say document.to_xml(pretty: true), :green
+          #shell.say document.to_xml(pretty: true), :green
           shell.say ""
           document.errors.full_messages.each do |error|
             shell.say_status :error, error, :red
@@ -34,16 +34,38 @@ module Saml
         end
 
         def build_table_for(document)
-          table = [
-            ['ID', document.id],
-            ['Issuer', document.issuer],
-            ['Version', document.version],
-            ['Issue Instant', document.issue_instant.iso8601],
-            ['Type', document.send(:name)],
-            ['Valid', document.valid?],
-            ['Signed?', !!document.signed?],
-            ['Trusted?', !!document.trusted?],
-          ]
+          table = [ ]
+          case document
+          when Saml::Kit::Document
+            table.push(['ID', document.id])
+            table.push(['Issuer', document.issuer])
+            table.push(['Version', document.version])
+            table.push(['Issue Instant', document.issue_instant.iso8601])
+            table.push(['Type', document.send(:name)])
+            table.push(['Valid', document.valid?])
+            table.push(['Signed?', !!document.signed?])
+            table.push(['Trusted?', !!document.trusted?])
+          when Saml::Kit::Metadata
+            table.push(['Entity Id', document.entity_id])
+            table.push(['Type', document.send(:name)])
+            table.push(['Valid', document.valid?])
+            table.push(['Name Id Formats', document.name_id_formats.inspect])
+            table.push(['Organization', document.organization_name])
+            table.push(['Url', document.organization_url])
+            table.push(['Contact', document.contact_person_company])
+            [
+              'SingleSignOnService',
+              'SingleLogoutService',
+              'AssertionConsumerService'
+            ].each do |type|
+              document.services(type).each do |service|
+                table.push([type, [service.location, service.binding]])
+              end
+            end
+            document.certificates.each do |certificate|
+              table.push(['', certificate.x509.to_text])
+            end
+          end
           if document.signature.present?
             signature = document.signature
             table.push(['Digest Value', signature.digest_value])

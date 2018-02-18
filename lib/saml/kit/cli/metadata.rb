@@ -18,7 +18,7 @@ module Saml
         def show(entity_id)
           metadata = registry.metadata_for(entity_id)
           if metadata
-            say metadata.to_xml(pretty: true), :green
+            Report.new(metadata).print(self)
           else
             say "`#{entity_id}` is not registered", :red
           end
