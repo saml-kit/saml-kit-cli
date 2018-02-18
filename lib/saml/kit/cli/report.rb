@@ -54,7 +54,7 @@ module Saml
             table.push(['Assertion Present?', document.assertion.present?])
             table.push(['Issuer', document.assertion.issuer])
             table.push(['Name Id', document.assertion.name_id])
-            table.push(['Signed?', document.assertion.signed?])
+            table.push(['Signed?', !!document.assertion.signed?])
             table.push(['Attributes', document.assertion.attributes.inspect])
             table.push(['Not Before', document.assertion.started_at])
             table.push(['Not After', document.assertion.expired_at])

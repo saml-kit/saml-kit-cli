@@ -16,6 +16,14 @@ module Saml
           say error.message, :red
         end
 
+        desc "raw <file>", "Decode the contents of a decoded file"
+        def raw(file)
+          content = IO.read(File.expand_path(file))
+          print_report_for(Document.to_saml_document(content))
+        rescue StandardError => error
+          say error.message, :red
+        end
+
         private
 
         def print_report_for(document)
