@@ -26,11 +26,7 @@ module Saml
         private
 
         def truncate(text, max: 50)
-          if text.length >= max
-            "#{text[0..max]}..."
-          else
-            text
-          end
+          text.length >= max ? "#{text[0..max]}..." : text
         end
 
         def build_table_for(document)
