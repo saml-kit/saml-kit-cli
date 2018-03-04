@@ -1,15 +1,4 @@
 RSpec.describe Saml::Kit::Cli::Commands::Certificate do
-  let(:because) { execute(command) }
-  let(:status) { because[0] }
-  let(:output) { because[1] }
-
-  def execute(command)
-    full_command = "bundle exec ruby ./exe/saml-kit #{command} 2>&1"
-    puts full_command
-    output = `#{full_command}`
-    [$?, output]
-  end
-
   describe "keypair" do
     let(:passphrase) { "password" }
 
