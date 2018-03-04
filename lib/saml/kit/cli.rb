@@ -1,6 +1,7 @@
 require 'saml/kit'
 require 'thor'
 require 'yaml/store'
+require 'uri'
 
 require 'saml/kit/cli/certificate'
 require 'saml/kit/cli/certificate_report'
