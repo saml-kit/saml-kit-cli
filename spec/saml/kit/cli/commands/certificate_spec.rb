@@ -41,16 +41,17 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     let(:base64_certificate) { x509.to_pem.gsub(/-----BEGIN CERTIFICATE-----\n/, '').gsub(/\n-----END CERTIFICATE-----\n/, '').gsub(/\n/, '') }
     let(:x509) do
       certificate = OpenSSL::X509::Certificate.new
+      key = OpenSSL::PKey::RSA.new(2048)
       certificate.subject = certificate.issuer = OpenSSL::X509::Name.parse('/C=CA/ST=AB/L=Calgary/O=SamlKit/OU=SamlKit/CN=SamlKit')
       certificate.not_before = Time.now
       certificate.not_after = certificate.not_before + 30 * 24 * 60 * 60
-      certificate.public_key = OpenSSL::PKey::RSA.new(2048).public_key
+      certificate.public_key = key.public_key
       certificate.serial = 0x0
       certificate.version = 2
+      certificate.sign(key, OpenSSL::Digest::SHA256.new)
       certificate
     end
 
-    specify { expect(OpenSSL::X509::Certificate.new(base64_certificate).to_text).to eql(x509.to_text) }
     specify { expect(status).to be_success }
     specify { expect(output).to include(x509.to_text) }
   end
