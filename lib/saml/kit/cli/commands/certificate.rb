@@ -12,8 +12,10 @@ module Saml
           )
           method_option :passphrase, default: nil, required: false
           def keypair
-            command = GenerateKeyPair.new(passphrase: passphrase, format: format)
-            command.run(self)
+            GenerateKeyPair.new(
+              passphrase: options[:passphrase],
+              format: options[:format]
+            ).run(self)
           end
 
           desc 'dump', 'Dump the details of a X509 Certificate.'

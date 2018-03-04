@@ -4,11 +4,12 @@ require 'yaml/store'
 require 'uri'
 
 require 'saml/kit/cli/certificate_report'
+require 'saml/kit/cli/commands'
+require 'saml/kit/cli/generate_key_pair'
 require 'saml/kit/cli/report'
 require 'saml/kit/cli/signature_report'
 require 'saml/kit/cli/version'
 require 'saml/kit/cli/yaml_registry'
-require 'saml/kit/cli/commands'
 
 module Saml
   module Kit
