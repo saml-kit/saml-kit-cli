@@ -32,16 +32,13 @@ module Saml
         private
 
         def with_transaction
-          if @in_transaction
-            yield @items
-          else
-            @items.transaction do
-              begin
-                @in_transaction = true
-                yield @items
-              ensure
-                @in_transaction = false
-              end
+          return yield @items if @in_transaction
+          @items.transaction do
+            begin
+              @in_transaction = true
+              yield @items
+            ensure
+              @in_transaction = false
             end
           end
         end

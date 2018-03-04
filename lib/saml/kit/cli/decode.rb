@@ -10,10 +10,13 @@ module Saml
           say error.message, :red
         end
 
-        desc 'post saml', 'Decodes the SAMLRequest/SAMLResponse using the HTTP Post binding'
+        desc(
+          'post saml',
+          'Decodes the SAMLRequest/SAMLResponse using the HTTP Post binding'
+        )
         method_option :export, default: nil, required: false
-        def post(saml_request)
-          print_report_for(post_binding.deserialize('SAMLRequest' => saml_request))
+        def post(saml)
+          print_report_for(post_binding.deserialize('SAMLRequest' => saml))
         rescue StandardError => error
           say error.message, :red
         end
