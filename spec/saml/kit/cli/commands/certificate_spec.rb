@@ -38,7 +38,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
 
   describe "dump" do
     let(:command) { "certificate dump '#{base64_certificate}'" }
-    let(:base64_certificate) { x509.to_pem.gsub(/-----BEGIN CERTIFICATE-----\n/, '').gsub(/\n-----END CERTIFICATE-----\n/, '').gsub(/\n/, '') }
+    let(:base64_certificate) { x509.to_pem }
     let(:x509) do
       certificate = OpenSSL::X509::Certificate.new
       key = OpenSSL::PKey::RSA.new(2048)
