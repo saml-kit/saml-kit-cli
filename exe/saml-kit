@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require "saml/kit/cli"
+require 'saml/kit/cli'
 
-samlkitrc = ENV.fetch("SAMLKITRC", File.join(Dir.home, ".samlkitrc"))
+samlkitrc = ENV.fetch('SAMLKITRC', File.join(Dir.home, '.samlkitrc'))
 Saml::Kit.configure do |configuration|
   configuration.entity_id = ENV.fetch('ENTITY_ID', `hostname`.chomp)
   configuration.registry = Saml::Kit::Cli::YamlRegistry.new(samlkitrc)

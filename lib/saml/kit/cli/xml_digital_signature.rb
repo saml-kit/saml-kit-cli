@@ -4,8 +4,8 @@ module Saml
   module Kit
     module Cli
       class XmlDigitalSignature < Thor
-        desc "verify file", "Verify if the contents of a file has a valid signature."
-        method_option :format, default: "short", required: false, enum: ["short", "full"]
+        desc 'verify file', 'Verify if the contents of a file has a valid signature.'
+        method_option :format, default: 'short', required: false, enum: %w[short full]
         def verify(file)
           format = options[:format]
           path = File.expand_path(file)
@@ -15,7 +15,11 @@ module Saml
             say_status :status, "Attempting to read #{path}...", :yellow
             content = IO.read(path)
           else
-            uri = URI.parse(file) rescue nil
+            uri = begin
+                    URI.parse(file)
+                  rescue StandardError
+                    nil
+                  end
             say_status :status, "Downloading from #{uri}...", :yellow
             content = Net::HTTP.get_response(uri).body.chomp
           end
@@ -28,7 +32,7 @@ module Saml
               say_status :error, error, :red
             end
 
-            if "full" == format
+            if format == 'full'
               document.send(:invalid_signatures).each_with_index do |invalid_signature, index|
                 say "Signature: #{index}"
                 say invalid_signature.signature.to_xml(indent: 2), :red

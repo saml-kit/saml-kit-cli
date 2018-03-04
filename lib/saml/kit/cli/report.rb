@@ -11,13 +11,13 @@ module Saml
         def print(shell)
           shell.say_status :success, "Decoded #{document.send(:name)}"
           shell.print_table build_table_for(document)
-          shell.say ""
+          shell.say ''
           if document.signature.present? && document.signature.certificate.present?
             shell.say(document.signature.certificate.x509.to_text)
           end
-          shell.say ""
+          shell.say ''
           shell.say document.to_xml(pretty: true), :green
-          shell.say ""
+          shell.say ''
           document.errors.full_messages.each do |error|
             shell.say_status :error, error, :red
           end
@@ -30,7 +30,7 @@ module Saml
         end
 
         def build_table_for(document)
-          table = [ ]
+          table = []
           case document
           when Saml::Kit::Document
             table.push(['ID', document.id])
@@ -49,10 +49,10 @@ module Saml
             table.push(['Organization', document.organization_name])
             table.push(['Url', document.organization_url])
             table.push(['Contact', document.contact_person_company])
-            [
-              'SingleSignOnService',
-              'SingleLogoutService',
-              'AssertionConsumerService'
+            %w[
+              SingleSignOnService
+              SingleLogoutService
+              AssertionConsumerService
             ].each do |type|
               document.services(type).each do |service|
                 table.push([type, [service.location, service.binding]])

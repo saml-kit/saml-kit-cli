@@ -2,7 +2,7 @@ module Saml
   module Kit
     module Cli
       class Decode < Thor
-        desc "redirect uri", "Decodes the uri using the HTTP Redirect binding"
+        desc 'redirect uri', 'Decodes the uri using the HTTP Redirect binding'
         method_option :export, default: nil, required: false
         def redirect(uri)
           print_report_for(redirect_binding.deserialize(uri))
@@ -10,7 +10,7 @@ module Saml
           say error.message, :red
         end
 
-        desc "post saml", "Decodes the SAMLRequest/SAMLResponse using the HTTP Post binding"
+        desc 'post saml', 'Decodes the SAMLRequest/SAMLResponse using the HTTP Post binding'
         method_option :export, default: nil, required: false
         def post(saml_request)
           print_report_for(post_binding.deserialize('SAMLRequest' => saml_request))
@@ -18,7 +18,7 @@ module Saml
           say error.message, :red
         end
 
-        desc "raw <file>", "Decode the contents of a decoded file"
+        desc 'raw <file>', 'Decode the contents of a decoded file'
         def raw(file)
           content = IO.read(File.expand_path(file))
           print_report_for(Document.to_saml_document(content))
@@ -30,7 +30,7 @@ module Saml
 
         def print_report_for(document, export = options[:export])
           IO.write(export, document.to_xml) if export
-          2.times { say "" }
+          2.times { say '' }
           Report.new(document).print(self)
         end
 
