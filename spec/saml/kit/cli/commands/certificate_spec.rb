@@ -1,15 +1,17 @@
 RSpec.describe Saml::Kit::Cli::Commands::Certificate do
-  let(:passphrase) { "password" }
+  let(:because) { execute(command) }
+  let(:status) { because[0] }
+  let(:output) { because[1] }
 
   def execute(command)
-    output = `bundle exec ruby ./exe/saml-kit #{command} 2>&1`
+    full_command = "bundle exec ruby ./exe/saml-kit #{command} 2>&1"
+    puts full_command
+    output = `#{full_command}`
     [$?, output]
   end
 
   describe "keypair" do
-    let(:because) { execute(command) }
-    let(:status) { because[0] }
-    let(:output) { because[1] }
+    let(:passphrase) { "password" }
 
     describe "generating a pem" do
       let(:command) { "certificate keypair --passphrase #{passphrase}" }
@@ -32,5 +34,24 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
       specify { expect(output).to include('X509_CERTIFICATE="-----BEGIN CERTIFICATE-----\n') }
       specify { expect(output).to include('PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nProc-Type: 4,ENCRYPTED\nDEK-Info: AES-256-CBC') }
     end
+  end
+
+  describe "dump" do
+    let(:command) { "certificate dump '#{base64_certificate}'" }
+    let(:base64_certificate) { x509.to_pem.gsub(/-----BEGIN CERTIFICATE-----\n/, '').gsub(/\n-----END CERTIFICATE-----\n/, '').gsub(/\n/, '') }
+    let(:x509) do
+      certificate = OpenSSL::X509::Certificate.new
+      certificate.subject = certificate.issuer = OpenSSL::X509::Name.parse('/C=CA/ST=AB/L=Calgary/O=SamlKit/OU=SamlKit/CN=SamlKit')
+      certificate.not_before = Time.now
+      certificate.not_after = certificate.not_before + 30 * 24 * 60 * 60
+      certificate.public_key = OpenSSL::PKey::RSA.new(2048).public_key
+      certificate.serial = 0x0
+      certificate.version = 2
+      certificate
+    end
+
+    specify { expect(OpenSSL::X509::Certificate.new(base64_certificate).to_text).to eql(x509.to_text) }
+    specify { expect(status).to be_success }
+    specify { expect(output).to include(x509.to_text) }
   end
 end
