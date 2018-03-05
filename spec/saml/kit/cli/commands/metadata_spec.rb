@@ -4,8 +4,11 @@ RSpec.describe Saml::Kit::Cli::Commands::Metadata do
   let(:entity_id) { 'https://saml-kit-proof.herokuapp.com/metadata' }
 
   describe "#register" do
-    let(:env) { "SAMLKITRC=#{Tempfile.new('saml-kit').path}" }
+    let(:env) { "SAMLKITRC=#{tempfile}" }
+    let(:tempfile) { Tempfile.new('saml-kit').path }
     let(:command) { "metadata register #{entity_id}" }
+
+    after { File.unlink(tempfile) }
 
     specify { expect(status).to be_success }
     specify { expect(output).to include(entity_id) }
