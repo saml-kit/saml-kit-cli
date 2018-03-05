@@ -35,4 +35,17 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     specify { expect(output).to include("Decoded #{document.send(:name)}") }
     specify { expect(output).to include(document.signature.certificate.x509.to_text) }
   end
+
+  describe "#raw" do
+    let(:command) { "decode raw #{tempfile}" }
+    let(:tempfile) { Tempfile.new('saml-kit').path }
+    let(:document) { Saml::Kit::AuthenticationRequest.build }
+
+    before { IO.write(tempfile, document.to_xml) }
+    after { File.unlink(tempfile) }
+
+    specify { expect(status).to be_success }
+    specify { expect(output).to include(document.to_xml(pretty: true)) }
+    specify { expect(output).to include("Decoded #{document.send(:name)}") }
+  end
 end

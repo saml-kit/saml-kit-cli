@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'saml/kit/cli'
+require 'tempfile'
 require_relative 'support/shell_helpers.rb'
 
 RSpec.configure do |config|
