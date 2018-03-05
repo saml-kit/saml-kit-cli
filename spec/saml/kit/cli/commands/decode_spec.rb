@@ -14,10 +14,10 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     specify { expect(status).to be_success }
     specify { expect(output).to include(document.to_xml(pretty: true)) }
     specify { expect(output).to include("Decoded #{document.send(:name)}") }
-    specify { pending; expect(output).to include(document.signature.certificate.x509.to_text) }
+    specify { expect(output).not_to include('Signature Value') }
   end
 
-  describe "#psot" do
+  describe "#post" do
     let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
     let(:document) { builder.build }
     let(:user) { double(name_id_for: SecureRandom.uuid) }
