@@ -4,21 +4,22 @@ module Saml
   module Kit
     module Cli
       class SignatureReport
-        attr_reader :content, :format
+        attr_reader :content, :format, :path
 
-        def initialize(file, format:)
+        def initialize(path, format:)
           @format = format
-          if File.exist?(File.expand_path(file))
-            @content = IO.read(File.expand_path(file))
+          @path = path
+          if File.exist?(File.expand_path(path))
+            @content = IO.read(File.expand_path(path))
           else
-            uri = URI.parse(file)
+            uri = URI.parse(path)
             @content = Net::HTTP.get_response(uri).body.chomp
           end
         end
 
         def print(shell)
-          shell.say to_xml(pretty: true)
-          return shell.say_status :success, "#{file} is valid", :green if valid?
+          shell.say to_xml
+          return shell.say_status :success, "#{path} is valid", :green if valid?
           errors.each { |error| shell.say_status(:error, error, :red) }
           return unless full?
           invalid_signatures.each { |x| shell.say(x.to_xml(indent: 2), :red) }
