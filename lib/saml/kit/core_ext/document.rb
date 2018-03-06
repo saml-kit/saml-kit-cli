@@ -14,6 +14,31 @@ module Saml
       end
     end
 
+    class AuthenticationRequest
+      def build_body(table = [])
+        table.push(['ACS', assertion_consumer_service_url])
+        table.push(['Name Id Format', name_id_format])
+      end
+    end
+
+    class Response
+      def build_body(table = [])
+        table.push(['Assertion Present?', assertion.present?])
+        table.push(['Issuer', assertion.issuer])
+        table.push(['Name Id', assertion.name_id])
+        table.push(['Signed?', assertion.signed?])
+        table.push(['Attributes', assertion.attributes.inspect])
+        table.push(['Not Before', assertion.started_at])
+        table.push(['Not After', assertion.expired_at])
+        table.push(['Audiences', assertion.audiences.inspect])
+        table.push(['Encrypted?', assertion.encrypted?])
+        table.push(['Decryptable', assertion.decryptable?])
+        if assertion.present?
+          assertion.signature.build_header(table) if assertion.signature.present?
+        end
+      end
+    end
+
     class Metadata
       def build_header(table = [])
         table.push(['Entity Id', entity_id])
@@ -33,20 +58,19 @@ module Saml
         end
         signature.build_header(table) if signature.present?
       end
+
+      def build_body(table = [])
+      end
     end
 
     class Signature
       def build_header(table = [])
         table.push(['Digest Value', digest_value])
-        table.push([
-          'Expected Digest Value', expected_digest_value
-        ])
+        table.push(['Expected Digest Value', expected_digest_value])
         table.push(['Digest Method', digest_method])
         table.push(['Signature Value', truncate(signature_value)])
         table.push(['Signature Method', signature_method])
-        table.push([
-          'Canonicalization Method', canonicalization_method
-        ])
+        table.push(['Canonicalization Method', canonicalization_method])
         table.push(['', certificate.x509.to_text])
       end
 
