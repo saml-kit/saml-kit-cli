@@ -12,10 +12,6 @@ module Saml
         table.push(['Trusted?', trusted?])
         signature.build_header(table) if signature.present?
       end
-
-      def truncate(text, max: 50)
-        text.length >= max ? "#{text[0..max]}..." : text
-      end
     end
 
     class Metadata
@@ -52,6 +48,12 @@ module Saml
           'Canonicalization Method', canonicalization_method
         ])
         table.push(['', certificate.x509.to_text])
+      end
+
+      private
+
+      def truncate(text, max: 50)
+        text.length >= max ? "#{text[0..max]}..." : text
       end
     end
   end

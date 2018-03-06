@@ -68,6 +68,7 @@ module Saml
         def build_table_for(document)
           table = []
           document.build_header(table)
+          #document.build_body(table)
           build_body_for(document, table)
           table
         end
