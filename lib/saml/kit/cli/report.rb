@@ -9,7 +9,11 @@ module Saml
         end
 
         def print(shell)
-          shell.say_status :success, "Decoded #{document.send(:name)}"
+          if document.is_a?(Saml::Kit::InvalidDocument)
+            shell.say_status :error, "Decoded #{document.send(:name)}"
+          else
+            shell.say_status :success, "Decoded #{document.send(:name)}"
+          end
           shell.print_table build_table_for(document)
           signature = document.signature
           if signature.present? && signature.certificate.present?
