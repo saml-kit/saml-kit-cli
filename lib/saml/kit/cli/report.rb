@@ -27,13 +27,6 @@ module Saml
           text.length >= max ? "#{text[0..max]}..." : text
         end
 
-        def build_body_for(document, table)
-          case document
-          when Saml::Kit::LogoutRequest
-            table.push(['Name Id', document.name_id])
-          end
-        end
-
         def build_table_for(document)
           table = []
           document.build_header(table)

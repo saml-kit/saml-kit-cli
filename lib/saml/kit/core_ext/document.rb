@@ -39,6 +39,12 @@ module Saml
       end
     end
 
+    class LogoutRequest
+      def build_body(table = [])
+        table.push(['Name Id', name_id])
+      end
+    end
+
     class Metadata
       def build_header(table = [])
         table.push(['Entity Id', entity_id])
