@@ -1,3 +1,5 @@
+require 'english'
+
 RSpec.shared_context 'shell execution' do
   subject { execute(command) }
 
@@ -9,7 +11,7 @@ RSpec.shared_context 'shell execution' do
     full_command = "#{env} bundle exec ruby ./exe/saml-kit #{command} 2>&1"
     puts full_command unless mute
     output = `#{full_command}`
-    [$?, output]
+    [$CHILD_STATUS, output]
   end
 end
 
