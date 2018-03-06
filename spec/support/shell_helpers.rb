@@ -1,4 +1,4 @@
-require 'english'
+require 'English'
 
 RSpec.shared_context 'when executing the cli' do
   subject { execute(command) }
