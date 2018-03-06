@@ -42,7 +42,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Metadata do
 
     context 'when zero metadata is registered' do
       specify { expect(status).to be_success }
-      specify { expect(output).to include('Please register metadata using `saml-kit metadata register <url>`') }
+      specify { expect(output).to include('Register metadata using `saml-kit metadata register <url>`') }
     end
   end
 end

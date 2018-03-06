@@ -12,7 +12,8 @@ module Saml
           shell.say_status :success, "Decoded #{document.send(:name)}"
           shell.print_table build_table_for(document)
           shell.say ''
-          if document.signature.present? && document.signature.certificate.present?
+          if document.signature.present? &&
+             document.signature.certificate.present?
             shell.say(document.signature.certificate.x509.to_text)
           end
           shell.say ''
@@ -39,8 +40,8 @@ module Saml
             table.push(['Issue Instant', document.issue_instant.iso8601])
             table.push(['Type', document.send(:name)])
             table.push(['Valid', document.valid?])
-            table.push(['Signed?', !!document.signed?])
-            table.push(['Trusted?', !!document.trusted?])
+            table.push(['Signed?', document.signed?])
+            table.push(['Trusted?', document.trusted?])
           when Saml::Kit::Metadata
             table.push(['Entity Id', document.entity_id])
             table.push(['Type', document.send(:name)])
@@ -65,11 +66,15 @@ module Saml
           if document.signature.present?
             signature = document.signature
             table.push(['Digest Value', signature.digest_value])
-            table.push(['Expected Digest Value', signature.expected_digest_value])
+            table.push([
+              'Expected Digest Value', signature.expected_digest_value
+            ])
             table.push(['Digest Method', signature.digest_method])
             table.push(['Signature Value', truncate(signature.signature_value)])
             table.push(['Signature Method', signature.signature_method])
-            table.push(['Canonicalization Method', signature.canonicalization_method])
+            table.push([
+              'Canonicalization Method', signature.canonicalization_method
+            ])
             table.push(['', signature.certificate.x509.to_text])
           end
           case document
@@ -82,7 +87,7 @@ module Saml
             table.push(['Assertion Present?', document.assertion.present?])
             table.push(['Issuer', document.assertion.issuer])
             table.push(['Name Id', document.assertion.name_id])
-            table.push(['Signed?', !!document.assertion.signed?])
+            table.push(['Signed?', document.assertion.signed?])
             table.push(['Attributes', document.assertion.attributes.inspect])
             table.push(['Not Before', document.assertion.started_at])
             table.push(['Not After', document.assertion.expired_at])
@@ -92,11 +97,17 @@ module Saml
             if document.assertion.present?
               signature = document.assertion.signature
               table.push(['Digest Value', signature.digest_value])
-              table.push(['Expected Digest Value', signature.expected_digest_value])
+              table.push([
+                'Expected Digest Value', signature.expected_digest_value
+              ])
               table.push(['Digest Method', signature.digest_method])
-              table.push(['Signature Value', truncate(signature.signature_value)])
+              table.push([
+                'Signature Value', truncate(signature.signature_value)
+              ])
               table.push(['Signature Method', signature.signature_method])
-              table.push(['Canonicalization Method', signature.canonicalization_method])
+              table.push([
+                'Canonicalization Method', signature.canonicalization_method
+              ])
               table.push(['', signature.certificate.x509.to_text])
             end
           end

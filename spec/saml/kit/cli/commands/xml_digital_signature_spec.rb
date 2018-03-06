@@ -1,4 +1,4 @@
-RSpec.describe Saml::Kit::Cli::Commands::Certificate do
+RSpec.describe Saml::Kit::Cli::Commands::XmlDigitalSignature do
   describe '#verify' do
     let(:command) { "xmldsig verify #{tempfile}" }
     let(:tempfile) { Tempfile.new('saml-kit').path }
@@ -13,7 +13,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     before { IO.write(tempfile, xml) }
     after { File.unlink(tempfile) }
 
-    context 'file is valid' do
+    context 'when the file is valid' do
       let(:document) { Saml::Kit::AuthenticationRequest.build(configuration: configuration) }
       let(:xml) { document.to_xml }
 
@@ -22,7 +22,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
       specify { expect(output).to include("success  #{tempfile} is valid") }
     end
 
-    context 'file is invalid' do
+    context 'when the file is invalid' do
       let(:document) { Saml::Kit::AuthenticationRequest.build(configuration: configuration) }
       let(:xml) { document.to_xml.gsub(/#{entity_id}/, 'hacked') }
 

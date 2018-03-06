@@ -1,6 +1,6 @@
 require 'english'
 
-RSpec.shared_context 'shell execution' do
+RSpec.shared_context 'when executing the cli' do
   subject { execute(command) }
 
   let(:status) { subject[0] }
@@ -16,5 +16,5 @@ RSpec.shared_context 'shell execution' do
 end
 
 RSpec.configure do |config|
-  config.include_context 'shell execution'
+  config.include_context 'when executing the cli'
 end

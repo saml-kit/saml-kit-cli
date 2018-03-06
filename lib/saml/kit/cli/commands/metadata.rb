@@ -11,7 +11,7 @@ module Saml
           desc 'list', "List each of the registered entityId's"
           def list
             if registry.count.zero?
-              say 'Please register metadata using `saml-kit metadata register <url>`'
+              say('Register metadata using `saml-kit metadata register <url>`')
             end
             registry.each do |x|
               say x.entity_id, :green

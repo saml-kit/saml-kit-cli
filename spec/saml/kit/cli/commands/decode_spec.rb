@@ -1,4 +1,4 @@
-RSpec.describe Saml::Kit::Cli::Commands::Certificate do
+RSpec.describe Saml::Kit::Cli::Commands::Decode do
   describe '#redirect' do
     let(:command) { "decode redirect #{redirect_binding.serialize(builder)[0]}" }
     let(:document) { builder.build }
