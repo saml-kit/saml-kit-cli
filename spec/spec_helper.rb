@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'saml/kit/cli'
+require 'securerandom'
 require 'tempfile'
 require_relative 'support/shell_helpers.rb'
 
