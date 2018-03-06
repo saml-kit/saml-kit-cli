@@ -49,6 +49,24 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(output).to include("Decoded #{document.send(:name)}") }
       specify { expect(output).to include(user.name_id_for) }
     end
+
+    context "when the document is a LogoutResponse" do
+      let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
+      let(:builder) { Saml::Kit::LogoutResponse.builder(request) }
+      let(:request) { double(id: Xml::Kit::Id.generate) }
+      let(:document) { builder.build }
+
+      specify { expect(status).to be_success }
+      specify { expect(output).to include(document.to_xml(pretty: true)) }
+      specify { expect(output).to include("Decoded #{document.send(:name)}") }
+    end
+
+    context "when the document is  Invalid" do
+      let(:command) { "decode post #{Base64.encode64('INVALID')}" }
+
+      specify { expect(status).to be_success }
+      specify { expect(output).to include("error  Decoded InvalidDocument") }
+    end
   end
 
   describe '#raw' do

@@ -12,6 +12,9 @@ module Saml
         table.push(['Trusted?', trusted?])
         signature.build_header(table) if signature.present?
       end
+
+      def build_body(table = [])
+      end
     end
 
     class AuthenticationRequest
