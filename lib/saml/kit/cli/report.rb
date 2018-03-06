@@ -11,14 +11,11 @@ module Saml
         def print(shell)
           shell.say_status :success, "Decoded #{document.send(:name)}"
           shell.print_table build_table_for(document)
-          shell.say ''
-          if document.signature.present? &&
-             document.signature.certificate.present?
-            shell.say(document.signature.certificate.x509.to_text)
+          signature = document.signature
+          if signature.present? && signature.certificate.present?
+            shell.say(signature.certificate.x509.to_text)
           end
-          shell.say ''
           shell.say document.to_xml(pretty: true), :green
-          shell.say ''
           document.errors.full_messages.each do |error|
             shell.say_status :error, error, :red
           end
@@ -30,7 +27,7 @@ module Saml
           text.length >= max ? "#{text[0..max]}..." : text
         end
 
-        def build_table_for(document)
+        def build_header_for(document)
           table = []
           case document
           when Saml::Kit::Document
@@ -77,6 +74,11 @@ module Saml
             ])
             table.push(['', signature.certificate.x509.to_text])
           end
+          table
+        end
+
+        def build_body_for(document)
+          table = []
           case document
           when Saml::Kit::AuthenticationRequest
             table.push(['ACS', document.assertion_consumer_service_url])
@@ -110,8 +112,12 @@ module Saml
               ])
               table.push(['', signature.certificate.x509.to_text])
             end
+            table
           end
-          table
+        end
+
+        def build_table_for(document)
+          build_header_for(document) + build_body_for(document)
         end
       end
     end
