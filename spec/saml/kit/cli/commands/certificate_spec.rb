@@ -1,8 +1,8 @@
 RSpec.describe Saml::Kit::Cli::Commands::Certificate do
-  describe "keypair" do
-    let(:passphrase) { "password" }
+  describe 'keypair' do
+    let(:passphrase) { 'password' }
 
-    describe "generating a pem" do
+    describe 'generating a pem' do
       let(:command) { "certificate keypair --passphrase #{passphrase}" }
 
       specify { expect(status).to be_success }
@@ -15,7 +15,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
       specify { expect(output).to include('DEK-Info: AES-256-CBC,') }
     end
 
-    describe "generating env format" do
+    describe 'generating env format' do
       let(:command) { "certificate keypair --passphrase #{passphrase} --format env" }
 
       specify { expect(status).to be_success }
@@ -25,7 +25,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     end
   end
 
-  describe "dump" do
+  describe 'dump' do
     let(:command) { "certificate dump '#{base64_certificate}'" }
     let(:base64_certificate) { x509.to_pem }
     let(:x509) do

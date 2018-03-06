@@ -1,5 +1,5 @@
 RSpec.describe Saml::Kit::Cli::Commands::Certificate do
-  describe "#redirect" do
+  describe '#redirect' do
     let(:command) { "decode redirect #{redirect_binding.serialize(builder)[0]}" }
     let(:document) { builder.build }
     let(:builder) do
@@ -17,7 +17,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     specify { expect(output).not_to include('Signature Value') }
   end
 
-  describe "#post" do
+  describe '#post' do
     let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
     let(:document) { builder.build }
     let(:user) { double(name_id_for: SecureRandom.uuid) }
@@ -36,7 +36,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Certificate do
     specify { expect(output).to include(document.signature.certificate.x509.to_text) }
   end
 
-  describe "#raw" do
+  describe '#raw' do
     let(:command) { "decode raw #{tempfile}" }
     let(:tempfile) { Tempfile.new('saml-kit').path }
     let(:document) { Saml::Kit::AuthenticationRequest.build }
