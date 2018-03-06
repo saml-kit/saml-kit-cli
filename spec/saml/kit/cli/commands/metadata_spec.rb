@@ -1,12 +1,12 @@
 RSpec.describe Saml::Kit::Cli::Commands::Metadata do
   let(:entity_id) { 'https://saml-kit-proof.herokuapp.com/metadata' }
+  let(:env) { "SAMLKITRC=#{tempfile}" }
+  let(:tempfile) { Tempfile.new('saml-kit').path }
+
+  after { File.unlink(tempfile) if File.exist?(tempfile) }
 
   describe "#register" do
-    let(:env) { "SAMLKITRC=#{tempfile}" }
-    let(:tempfile) { Tempfile.new('saml-kit').path }
     let(:command) { "metadata register #{entity_id}" }
-
-    after { File.unlink(tempfile) }
 
     specify { expect(status).to be_success }
     specify { expect(output).to include(entity_id) }
@@ -15,26 +15,34 @@ RSpec.describe Saml::Kit::Cli::Commands::Metadata do
   end
 
   describe "#show" do
-    before :each do
-      env = "SAMLKITRC=#{Tempfile.new('saml-kit').path}"
-      execute("metadata register #{entity_id}", env: env)
-    end
-
     let(:command) { "metadata show #{entity_id}" }
 
-    specify { expect(status).to be_success }
-    specify { expect(output).to include(entity_id) }
+    context "when the entity_id is registered" do
+      before { execute("metadata register #{entity_id}") }
+
+      specify { expect(status).to be_success }
+      specify { expect(output).to include(entity_id) }
+    end
+
+    context "when the entity_id is not registered" do
+      specify { expect(status).to be_success }
+      specify { expect(output).to include("`#{entity_id}` is not registered") }
+    end
   end
 
   describe "#list" do
-    before :each do
-      env = "SAMLKITRC=#{Tempfile.new('saml-kit').path}"
-      execute("metadata register #{entity_id}", env: env)
-    end
-
     let(:command) { "metadata list" }
 
-    specify { expect(status).to be_success }
-    specify { expect(output).to include(entity_id) }
+    context "when a metadata is registered" do
+      before { execute("metadata register #{entity_id}") }
+
+      specify { expect(status).to be_success }
+      specify { expect(output).to include(entity_id) }
+    end
+
+    context "when zero metadata is registered" do
+      specify { expect(status).to be_success }
+      specify { expect(output).to include("Please register metadata using `saml-kit metadata register <url>`") }
+    end
   end
 end
