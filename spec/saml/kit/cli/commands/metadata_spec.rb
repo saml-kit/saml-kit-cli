@@ -19,7 +19,6 @@ RSpec.describe Saml::Kit::Cli::Commands::Metadata do
 
     context 'when the entity_id is registered' do
       before { execute("metadata register #{entity_id}") }
-
       specify { expect(status).to be_success }
       specify { expect(output).to include(entity_id) }
     end

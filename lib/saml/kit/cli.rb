@@ -3,6 +3,8 @@ require 'thor'
 require 'yaml/store'
 require 'uri'
 
+require 'saml/kit/core_ext/document'
+
 require 'saml/kit/cli/certificate_report'
 require 'saml/kit/cli/commands'
 require 'saml/kit/cli/generate_key_pair'

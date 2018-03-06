@@ -27,58 +27,7 @@ module Saml
           text.length >= max ? "#{text[0..max]}..." : text
         end
 
-        def build_header_for(document)
-          table = []
-          case document
-          when Saml::Kit::Document
-            table.push(['ID', document.id])
-            table.push(['Issuer', document.issuer])
-            table.push(['Version', document.version])
-            table.push(['Issue Instant', document.issue_instant.iso8601])
-            table.push(['Type', document.send(:name)])
-            table.push(['Valid', document.valid?])
-            table.push(['Signed?', document.signed?])
-            table.push(['Trusted?', document.trusted?])
-          when Saml::Kit::Metadata
-            table.push(['Entity Id', document.entity_id])
-            table.push(['Type', document.send(:name)])
-            table.push(['Valid', document.valid?])
-            table.push(['Name Id Formats', document.name_id_formats.inspect])
-            table.push(['Organization', document.organization_name])
-            table.push(['Url', document.organization_url])
-            table.push(['Contact', document.contact_person_company])
-            %w[
-              SingleSignOnService
-              SingleLogoutService
-              AssertionConsumerService
-            ].each do |type|
-              document.services(type).each do |service|
-                table.push([type, [service.location, service.binding]])
-              end
-            end
-            document.certificates.each do |certificate|
-              table.push(['', certificate.x509.to_text])
-            end
-          end
-          if document.signature.present?
-            signature = document.signature
-            table.push(['Digest Value', signature.digest_value])
-            table.push([
-              'Expected Digest Value', signature.expected_digest_value
-            ])
-            table.push(['Digest Method', signature.digest_method])
-            table.push(['Signature Value', truncate(signature.signature_value)])
-            table.push(['Signature Method', signature.signature_method])
-            table.push([
-              'Canonicalization Method', signature.canonicalization_method
-            ])
-            table.push(['', signature.certificate.x509.to_text])
-          end
-          table
-        end
-
-        def build_body_for(document)
-          table = []
+        def build_body_for(document, table)
           case document
           when Saml::Kit::AuthenticationRequest
             table.push(['ACS', document.assertion_consumer_service_url])
@@ -117,7 +66,10 @@ module Saml
         end
 
         def build_table_for(document)
-          build_header_for(document) + build_body_for(document)
+          table = []
+          document.build_header(table)
+          build_body_for(document, table)
+          table
         end
       end
     end
