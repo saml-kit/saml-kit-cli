@@ -37,8 +37,8 @@ module Saml
         table.push(['Audiences', assertion.audiences.inspect])
         table.push(['Encrypted?', assertion.encrypted?])
         table.push(['Decryptable', assertion.decryptable?])
-        if assertion.present?
-          assertion.signature.build_table(table) if assertion.signature.present?
+        if assertion.present? && assertion.signature.present?
+          assertion.signature.build_table(table)
         end
         table
       end
