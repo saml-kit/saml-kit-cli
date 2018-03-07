@@ -10,7 +10,7 @@ module Saml
         table.push(['Valid', valid?])
         table.push(['Signed?', signed?])
         table.push(['Trusted?', trusted?])
-        signature.build_table(table) if signature.present?
+        signature.build_table(table)
         table
       end
     end
@@ -37,9 +37,7 @@ module Saml
         table.push(['Audiences', assertion.audiences.inspect])
         table.push(['Encrypted?', assertion.encrypted?])
         table.push(['Decryptable', assertion.decryptable?])
-        if assertion.present? && assertion.signature.present?
-          assertion.signature.build_table(table)
-        end
+        assertion.signature.build_table(table) if assertion.present?
         table
       end
     end
@@ -69,13 +67,14 @@ module Saml
         certificates.each do |certificate|
           table.push(['', certificate.x509.to_text])
         end
-        signature.build_table(table) if signature.present?
+        signature.build_table(table)
         table
       end
     end
 
     class Signature
       def build_table(table = [])
+        return table unless present?
         table.push(['Digest Value', digest_value])
         table.push(['Expected Digest Value', expected_digest_value])
         table.push(['Digest Method', digest_method])
