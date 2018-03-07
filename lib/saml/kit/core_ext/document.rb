@@ -27,18 +27,23 @@ module Saml
     class Response
       def build_table(table = [])
         super(table)
-        table.push(['Assertion Present?', assertion.present?])
-        table.push(['Issuer', assertion.issuer])
-        table.push(['Name Id', assertion.name_id])
-        table.push(['Signed?', assertion.signed?])
-        table.push(['Attributes', assertion.attributes.inspect])
-        table.push(['Not Before', assertion.started_at])
-        table.push(['Not After', assertion.expired_at])
-        table.push(['Audiences', assertion.audiences.inspect])
-        table.push(['Encrypted?', assertion.encrypted?])
-        table.push(['Decryptable', assertion.decryptable?])
-        assertion.signature.build_table(table) if assertion.present?
+        assertion.build_table(table) if assertion.present?
         table
+      end
+    end
+
+    class Assertion
+      def build_table(table = [])
+        table.push(['Assertion Present?', present?])
+        table.push(['Issuer', issuer])
+        table.push(['Name Id', name_id])
+        table.push(['Attributes', attributes.inspect])
+        table.push(['Not Before', started_at])
+        table.push(['Not After', expired_at])
+        table.push(['Audiences', audiences.inspect])
+        table.push(['Encrypted?', encrypted?])
+        table.push(['Decryptable', decryptable?])
+        signature.build_table(table)
       end
     end
 
