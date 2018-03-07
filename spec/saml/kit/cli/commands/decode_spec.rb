@@ -22,7 +22,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       Saml::Kit::Bindings::HttpPost.new(location: 'https://www.example.com/')
     end
 
-    context "when the document is an AuthnRequest" do
+    context 'when the document is an AuthnRequest' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLRequest']}" }
       let(:builder) { Saml::Kit::AuthenticationRequest.builder }
       let(:document) { builder.build }
@@ -32,7 +32,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(output).to include("Decoded #{document.send(:name)}") }
     end
 
-    context "when the document is a Response" do
+    context 'when the document is a Response' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
       let(:builder) do
         Saml::Kit::Response.builder(user) do |x|
@@ -48,7 +48,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(output).to include(document.signature.certificate.x509.to_text) }
     end
 
-    context "when the document is a LogoutRequest" do
+    context 'when the document is a LogoutRequest' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLRequest']}" }
       let(:builder) { Saml::Kit::LogoutRequest.builder(user) }
       let(:user) { double(name_id_for: SecureRandom.uuid) }
@@ -60,7 +60,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(output).to include(user.name_id_for) }
     end
 
-    context "when the document is a LogoutResponse" do
+    context 'when the document is a LogoutResponse' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
       let(:builder) { Saml::Kit::LogoutResponse.builder(request) }
       let(:request) { double(id: Xml::Kit::Id.generate) }
@@ -71,11 +71,11 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(output).to include("Decoded #{document.send(:name)}") }
     end
 
-    context "when the document is  Invalid" do
+    context 'when the document is  Invalid' do
       let(:command) { "decode post #{Base64.encode64('INVALID')}" }
 
       specify { expect(status).to be_success }
-      specify { expect(output).to include("error  Decoded InvalidDocument") }
+      specify { expect(output).to include('error  Decoded InvalidDocument') }
     end
   end
 
