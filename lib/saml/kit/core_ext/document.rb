@@ -59,7 +59,11 @@ module Saml
         table.push(['Organization', organization_name])
         table.push(['Url', organization_url])
         table.push(['Contact', contact_person_company])
-        %w[SingleSignOnService SingleLogoutService AssertionConsumerService].each do |type|
+        %w[
+          SingleSignOnService
+          SingleLogoutService
+          AssertionConsumerService
+        ].each do |type|
           services(type).each do |service|
             table.push([type, [service.location, service.binding]])
           end

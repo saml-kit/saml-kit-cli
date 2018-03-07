@@ -1,4 +1,6 @@
 RSpec.describe Saml::Kit::Cli::Commands::Decode do
+  let(:user) { double(name_id_for: SecureRandom.uuid) }
+
   describe '#redirect' do
     let(:command) { "decode redirect #{redirect_binding.serialize(builder)[0]}" }
     let(:document) { builder.build }
@@ -39,7 +41,6 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
           x.sign_with(Xml::Kit::KeyPair.generate(use: :signing))
         end
       end
-      let(:user) { double(name_id_for: SecureRandom.uuid) }
       let(:document) { builder.build }
 
       specify { expect(status).to be_success }
@@ -51,7 +52,6 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
     context 'when the document is a LogoutRequest' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLRequest']}" }
       let(:builder) { Saml::Kit::LogoutRequest.builder(user) }
-      let(:user) { double(name_id_for: SecureRandom.uuid) }
       let(:document) { builder.build }
 
       specify { expect(status).to be_success }
@@ -63,7 +63,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
     context 'when the document is a LogoutResponse' do
       let(:command) { "decode post #{post_binding.serialize(builder)[1]['SAMLResponse']}" }
       let(:builder) { Saml::Kit::LogoutResponse.builder(request) }
-      let(:request) { double(id: Xml::Kit::Id.generate) }
+      let(:request) { instance_double(Saml::Kit::AuthenticationRequest, id: Xml::Kit::Id.generate) }
       let(:document) { builder.build }
 
       specify { expect(status).to be_success }
