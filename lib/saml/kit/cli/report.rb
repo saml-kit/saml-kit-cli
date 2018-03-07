@@ -14,7 +14,7 @@ module Saml
           else
             shell.say_status :success, "Decoded #{document.send(:name)}"
           end
-          shell.print_table build_table_for(document)
+          shell.print_table document.build_table
           signature = document.signature
           if signature.present? && signature.certificate.present?
             shell.say(signature.certificate.x509.to_text)
@@ -23,19 +23,6 @@ module Saml
           document.errors.full_messages.each do |error|
             shell.say_status :error, error, :red
           end
-        end
-
-        private
-
-        def truncate(text, max: 50)
-          text.length >= max ? "#{text[0..max]}..." : text
-        end
-
-        def build_table_for(document)
-          table = []
-          document.build_header(table)
-          document.build_body(table)
-          table
         end
       end
     end

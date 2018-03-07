@@ -1,31 +1,32 @@
 module Saml
   module Kit
     class Document
-      def build_header(table = [])
+      def build_table(table = [])
         table.push(['ID', id])
         table.push(['Issuer', issuer])
         table.push(['Version', version])
         table.push(['Issue Instant', issue_instant.iso8601])
-        table.push(['Type', send(:name)])
+        table.push(['Type', name])
         table.push(['Valid', valid?])
         table.push(['Signed?', signed?])
         table.push(['Trusted?', trusted?])
-        signature.build_header(table) if signature.present?
-      end
-
-      def build_body(table = [])
+        signature.build_table(table) if signature.present?
+        table
       end
     end
 
     class AuthenticationRequest
-      def build_body(table = [])
+      def build_table(table = [])
+        super(table)
         table.push(['ACS', assertion_consumer_service_url])
         table.push(['Name Id Format', name_id_format])
+        table
       end
     end
 
     class Response
-      def build_body(table = [])
+      def build_table(table = [])
+        super(table)
         table.push(['Assertion Present?', assertion.present?])
         table.push(['Issuer', assertion.issuer])
         table.push(['Name Id', assertion.name_id])
@@ -37,21 +38,24 @@ module Saml
         table.push(['Encrypted?', assertion.encrypted?])
         table.push(['Decryptable', assertion.decryptable?])
         if assertion.present?
-          assertion.signature.build_header(table) if assertion.signature.present?
+          assertion.signature.build_table(table) if assertion.signature.present?
         end
+        table
       end
     end
 
     class LogoutRequest
-      def build_body(table = [])
+      def build_table(table = [])
+        super(table)
         table.push(['Name Id', name_id])
+        table
       end
     end
 
     class Metadata
-      def build_header(table = [])
+      def build_table(table = [])
         table.push(['Entity Id', entity_id])
-        table.push(['Type', send(:name)])
+        table.push(['Type', name])
         table.push(['Valid', valid?])
         table.push(['Name Id Formats', name_id_formats.inspect])
         table.push(['Organization', organization_name])
@@ -65,15 +69,13 @@ module Saml
         certificates.each do |certificate|
           table.push(['', certificate.x509.to_text])
         end
-        signature.build_header(table) if signature.present?
-      end
-
-      def build_body(table = [])
+        signature.build_table(table) if signature.present?
+        table
       end
     end
 
     class Signature
-      def build_header(table = [])
+      def build_table(table = [])
         table.push(['Digest Value', digest_value])
         table.push(['Expected Digest Value', expected_digest_value])
         table.push(['Digest Method', digest_method])
@@ -81,6 +83,7 @@ module Saml
         table.push(['Signature Method', signature_method])
         table.push(['Canonicalization Method', canonicalization_method])
         table.push(['', certificate.x509.to_text])
+        table
       end
 
       private
