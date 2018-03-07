@@ -9,20 +9,30 @@ module Saml
         end
 
         def print(shell)
-          if document.is_a?(Saml::Kit::InvalidDocument)
-            shell.say_status :error, "Decoded #{document.send(:name)}"
-          else
-            shell.say_status :success, "Decoded #{document.send(:name)}"
-          end
+          shell.say_status status, "Decoded #{document.send(:name)}"
           shell.print_table document.build_table
-          signature = document.signature
-          if signature.present? && signature.certificate.present?
-            shell.say(signature.certificate.x509.to_text)
-          end
+          print_signature(document.signature, shell)
+          print_xml(shell)
+          print_errors(document.errors.full_messages, shell)
+        end
+
+        private
+
+        def status
+          document.is_a?(Saml::Kit::InvalidDocument) ? :error : :sucess
+        end
+
+        def print_errors(errors, shell)
+          errors.each { |x| shell.say_status :error, x, :red }
+        end
+
+        def print_signature(signature, shell)
+          return if !signature.present? || !signature.certificate.present?
+          shell.say(signature.certificate.x509.to_text)
+        end
+
+        def print_xml(shell)
           shell.say document.to_xml(pretty: true), :green
-          document.errors.full_messages.each do |error|
-            shell.say_status :error, error, :red
-          end
         end
       end
     end
