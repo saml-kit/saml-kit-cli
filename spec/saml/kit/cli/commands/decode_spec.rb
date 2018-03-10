@@ -1,5 +1,5 @@
 RSpec.describe Saml::Kit::Cli::Commands::Decode do
-  let(:user) { double(name_id_for: SecureRandom.uuid) }
+  let(:user) { User.new(SecureRandom.uuid) }
 
   describe '#redirect' do
     let(:command) { "decode redirect #{redirect_binding.serialize(builder)[0]}" }
