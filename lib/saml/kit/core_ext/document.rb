@@ -1,17 +1,22 @@
 module Saml
   module Kit
     class Document
+      TABLE = {
+        'ID' => ->(x) { x.id },
+        'Issuer' => ->(x) { x.issuer },
+        'Version' => ->(x) { x.version },
+        'Issue Instant' => ->(x) { x.issue_instant.iso8601 },
+        'Type' => ->(x) { x.name },
+        'Valid' => ->(x) { x.valid? },
+        'Signed?' => ->(x) { x.signed? },
+        'Trusted?' => ->(x) { x.trusted? },
+      }.freeze
+
       def build_table(table = [])
-        table.push(['ID', id])
-        table.push(['Issuer', issuer])
-        table.push(['Version', version])
-        table.push(['Issue Instant', issue_instant.iso8601])
-        table.push(['Type', name])
-        table.push(['Valid', valid?])
-        table.push(['Signed?', signed?])
-        table.push(['Trusted?', trusted?])
+        TABLE.each do |key, callable|
+          table.push([key, callable.call(self)])
+        end
         signature.build_table(table)
-        table
       end
     end
   end
