@@ -35,6 +35,11 @@ module Saml
 
         desc 'xmldsig SUBCOMMAND ...ARGS', 'Check XML digital signatures.'
         subcommand 'xmldsig', Commands::XmlDigitalSignature
+
+        desc 'version', 'Display the current version'
+        def version
+          say Saml::Kit::Cli::VERSION
+        end
       end
     end
   end
