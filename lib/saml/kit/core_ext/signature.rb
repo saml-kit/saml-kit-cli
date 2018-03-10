@@ -1,16 +1,21 @@
 module Saml
   module Kit
     class Signature
+      TABLE = {
+        'Digest Value' => ->(x) { x.digest_value },
+        'Expected Digest Value' => ->(x) { x.expected_digest_value },
+        'Digest Method' => ->(x) { x.digest_method },
+        'Signature Value' => ->(x) { x.truncate(signature_value) },
+        'Signature Method' => ->(x) { x.signature_method },
+        'Canonicalization Method' => ->(x) { x.canonicalization_method },
+      }.freeze
+
       def build_table(table = [])
         return table unless present?
-        table.push(['Digest Value', digest_value])
-        table.push(['Expected Digest Value', expected_digest_value])
-        table.push(['Digest Method', digest_method])
-        table.push(['Signature Value', truncate(signature_value)])
-        table.push(['Signature Method', signature_method])
-        table.push(['Canonicalization Method', canonicalization_method])
+        TABLE.each do |key, callable|
+          table.push([key, callable.call(self)])
+        end
         table.push(['', certificate.x509.to_text])
-        table
       end
 
       private
