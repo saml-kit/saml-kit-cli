@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/saml-kit/saml-kit-cli.svg?branch=master)](https://travis-ci.org/saml-kit/saml-kit-cli)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f303b0bfa878d7b81722/maintainability)](https://codeclimate.com/github/saml-kit/saml-kit-cli/maintainability)
+[![Security](https://hakiri.io/github/saml-kit/saml-kit-cli/master.svg)](https://hakiri.io/github/saml-kit/saml-kit-cli/master)
 
 ## Installation
 
