@@ -12,7 +12,13 @@ gem install 'saml-kit-cli'
 
 And then execute:
 
-    $ saml-kit
+		も saml-kit
+		Commands:
+			saml-kit certificate SUBCOMMAND ...ARGS  # Work with SAML Certificates.
+			saml-kit decode SUBCOMMAND ...ARGS       # decode SAMLRequest/SAMLResponse.
+			saml-kit help [COMMAND]                  # Describe available commands or one specific command
+			saml-kit metadata SUBCOMMAND ...ARGS     # Work with SAML Metadata.
+			saml-kit xmldsig SUBCOMMAND ...ARGS      # Check XML digital signatures.
 
 ## Usage
 
