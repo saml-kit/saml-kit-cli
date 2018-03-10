@@ -1,5 +1,3 @@
-require 'uri'
-
 module Saml
   module Kit
     module Cli
