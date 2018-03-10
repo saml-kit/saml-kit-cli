@@ -57,7 +57,7 @@ RSpec.describe Saml::Kit::Cli::Commands::Decode do
       specify { expect(status).to be_success }
       specify { expect(output).to include(document.to_xml(pretty: true)) }
       specify { expect(output).to include("Decoded #{document.send(:name)}") }
-      specify { expect(output).to include(user.name_id_for) }
+      specify { expect(output).to include(user.id) }
     end
 
     context 'when the document is a LogoutResponse' do
