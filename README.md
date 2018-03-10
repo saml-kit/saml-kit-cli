@@ -1,5 +1,7 @@
 # Saml::Kit::Cli
 
+[![Build Status](https://travis-ci.org/saml-kit/saml-kit-cli.svg?branch=master)](https://travis-ci.org/saml-kit/saml-kit-cli)
+
 ## Installation
 
 ```ruby
