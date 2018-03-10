@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Saml::Kit::Cli::Commands::Decode do
   let(:user) { User.new(SecureRandom.uuid) }
 

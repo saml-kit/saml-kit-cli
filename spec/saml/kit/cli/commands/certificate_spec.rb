@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Saml::Kit::Cli::Commands::Certificate do
   describe 'keypair' do
     let(:passphrase) { 'password' }

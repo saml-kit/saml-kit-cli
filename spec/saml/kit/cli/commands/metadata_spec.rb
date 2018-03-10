@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Saml::Kit::Cli::Commands::Metadata do
   let(:entity_id) { 'https://saml-kit-proof.herokuapp.com/metadata' }
   let(:env) { "SAMLKITRC=#{tempfile}" }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'saml/kit'
 require 'thor'
 require 'yaml/store'

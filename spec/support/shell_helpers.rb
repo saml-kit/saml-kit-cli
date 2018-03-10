@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'English'
 
 RSpec.shared_context 'when executing the cli' do

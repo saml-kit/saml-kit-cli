@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Saml::Kit::Cli::Commands::XmlDigitalSignature do
   describe '#verify' do
     let(:command) { "xmldsig verify #{tempfile}" }
