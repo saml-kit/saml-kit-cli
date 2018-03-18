@@ -10,7 +10,7 @@ RSpec.shared_context 'when executing the cli' do
   let(:env) {}
 
   def execute(command, mute: false, env: self.env)
-    full_command = "#{env} bundle exec ruby ./exe/saml-kit #{command} 2>&1"
+    full_command = "#{env} ./exe/saml-kit #{command} 2>&1"
     puts full_command unless mute
     output = `#{full_command}`
     [$CHILD_STATUS, output]
