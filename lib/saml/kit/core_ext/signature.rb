@@ -17,7 +17,7 @@ module Saml
         TABLE.each do |key, callable|
           table.push([key, callable.call(self)])
         end
-        table.push(['', certificate.x509.to_text])
+        table.push(['', certificate.x509.to_text]) if certificate
       end
 
       def truncate(text, max: 50)
